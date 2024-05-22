@@ -82,6 +82,44 @@
     <section id="venda" class="section">
         <h2>Venda de Legumes</h2>
         <p>Vendo legumes frescos diretamente do meu jardim. Entre em contato para saber mais sobre as ofertas e preços atuais.</p>
+        <form id="orderForm">
+            <label for="customer">Selecione o cliente:</label>
+            <select id="customer" name="customer">
+                <option value="">Selecione...</option>
+                <!-- Populate dropdown options with customer names -->
+                <script>
+                    var customers = [
+                        "Amandio",
+                        "Ana Narciso",
+                        "Antonio Augusto",
+                        "Carla (Titita)",
+                        "Claudia",
+                        "Irma",
+                        "Joao Madrinha",
+                        "Joao Barrento",
+                        "Mimi",
+                        "Rui Cabarrao",
+                        "Rui Martins",
+                        "Vasco Ramiro",
+                        "Ze Ramiro"
+                    ];
+                    customers.forEach(function(customer) {
+                        document.write('<option value="' + customer + '">' + customer + '</option>');
+                    });
+                </script>
+            </select>
+
+            <label for="productName">Nome do produto:</label>
+            <input type="text" id="productName" name="productName" required>
+            
+            <label for="quantity">Quantidade:</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>
+
+            <label for="price">Preço:</label>
+            <input type="number" id="price" name="price" min="0.01" step="0.01" required>
+
+            <button type="submit">Adicionar ao carrinho</button>
+        </form>
     </section>
 
     <section id="meu-jardim" class="section">
@@ -113,5 +151,26 @@
     <p>&copy; 2024 Meus Produtos de Jardim. Todos os direitos reservados.</p>
 </footer>
 
-</body>
-</html>
+<script>
+    document.getElementById("orderForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Gather form data
+        var customerName = document.getElementById("customer").value;
+        var productName = document.getElementById("productName").value;
+        var quantity = document.getElementById("quantity").value;
+        var price = document.getElementById("price").value;
+
+        // Format data as CSV row
+        var csvRow = customerName + "," + productName + "," + quantity + "," + price;
+
+        // Create or append to a CSV file
+        var csvContent = "data:text/csv;charset=utf-8," + csvRow + "\n";
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "orders.csv");
+        document.body.appendChild(link); // Required for Firefox
+        link.click();
+    });
+</
